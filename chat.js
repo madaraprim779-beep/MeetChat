@@ -14,5 +14,29 @@ const messagesContainer = document.getElementById('messages');
 sendBtn.addEventListener('click', async () => {
     if (msgInput.value.trim() !== "") {
         try {
-            await addDoc(collection(db, "
+            await addDoc(collection(db, "messages"), {
+                text: msgInput.value,
+                createdAt: serverTimestamp(),
+                userId: "user1" 
+            });
+            msgInput.value = ''; // Vider l'input
+        } catch (error) {
+            console.error("Erreur lors de l'envoi : ", error);
+        }
+    }
+});
+
+// 2. Affichage des messages en temps réel
+const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+
+onSnapshot(q, (snapshot) => {
+    messagesContainer.innerHTML = ''; // Nettoyer l'affichage
+    snapshot.forEach((doc) => {
+        const messageData = doc.data();
+        const p = document.createElement('p');
+        p.textContent = messageData.text;
+        messagesContainer.appendChild(p);
+    });
+});
+
 
