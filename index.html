@@ -1,20 +1,38 @@
-<script type="module">
-  // Utilise ces liens exacts
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
-  
-  const firebaseConfig = {
-    apiKey: "AIzaSyAsZHLa7Lt0WQQrzkQ1qJKIb54E0lXpfMU",
-    authDomain: "meetchat-8f5a8.firebaseapp.com",
-    projectId: "meetchat-8f5a8",
-    storageBucket: "meetchat-8f5a8.appspot.com", // J'ai corrigé l'URL ici
-    messagingSenderId: "899856294069",
-    appId: "1:899856294069:web:ff5bd9ad7298df9ade9efc",
-    measurementId: "G-VMXP1P1C58"
-  };
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MeetChat</title>
+    <style>
+        body { background-color: #ECE5DD; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 30px; border-radius: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Bienvenue sur MeetChat</h1>
+        <p>Connexion à Firebase en cours...</p>
+    </div>
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  
-  console.log("Firebase est bien connecté !");
-</script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsZHLa7Lt0WQQrzkQ1qJKIb54E0lXpfMU",
+            authDomain: "meetchat-8f5a8.firebaseapp.com",
+            projectId: "meetchat-8f5a8",
+            storageBucket: "meetchat-8f5a8.appspot.com",
+            messagingSenderId: "899856294069",
+            appId: "1:899856294069:web:ff5bd9ad7298df9ade9efc",
+            measurementId: "G-VMXP1P1C58"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        console.log("Firebase et Analytics sont initialisés !");
+        document.querySelector("p").innerText = "Firebase est connecté avec succès !";
+    </script>
+</body>
+</html>
