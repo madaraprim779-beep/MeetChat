@@ -1,27 +1,24 @@
-function register() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
-  let name = document.getElementById("name").value;
+function register(){
+let email = document.getElementById("r-email").value;
+let pass = document.getElementById("r-pass").value;
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      db.collection("users").doc(user.user.uid).set({
-        name: name,
-        email: email
-      });
+auth.createUserWithEmailAndPassword(email, pass)
+.then(u=>{
+db.collection("users").doc(u.user.uid).set({
+email: email,
+online: true
+});
 
-      window.location.href = "home.html";
-    })
-    .catch(err => alert(err.message));
+window.location.href="home.html";
+});
 }
 
-function login() {
-  let email = document.getElementById("email").value;
-  let password = document.getElementById("password").value;
+function login(){
+let email = document.getElementById("l-email").value;
+let pass = document.getElementById("l-pass").value;
 
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      window.location.href = "home.html";
-    })
-    .catch(err => alert(err.message));
+auth.signInWithEmailAndPassword(email, pass)
+.then(()=>{
+window.location.href="home.html";
+});
 }
