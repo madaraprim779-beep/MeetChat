@@ -1,22 +1,26 @@
-<!-- Remplacez vos anciennes balises script par celles-ci -->
-<script type="module">
-  // Importation via CDN (Version modulaire)
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetChat</title>
+</head>
+<body>
 
-  // Votre configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AizaSyAsZHLa7Lt8MQqrzkQ1qJKib54E0lxpfMU",
-    authDomain: "meetchat-8f5a8.firebaseapp.com",
-    projectId: "meetchat-8f5a8",
-    storageBucket: "meetchat-8f5a8.firebasestorage.app",
-    messagingSenderId: "899856294869",
-    appId: "1:899856294869:web:ff5bd9ad7298df9ade9efc"
-  };
+    <h1>MeetChat</h1>
 
-  const app = initializeApp(firebaseConfig);
-  export const auth = getAuth(app);
-  export const db = getFirestore(app);
-</script>
+    <!-- Zone d'affichage des messages -->
+    <div id="messages" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll; margin-bottom: 10px; padding: 10px;">
+        <!-- Les messages s'afficheront ici -->
+    </div>
+
+    <!-- Zone de saisie -->
+    <input type="text" id="msg" placeholder="Tapez votre message...">
+    <button id="send-btn">Envoyer</button>
+
+    <!-- Chargement du script principal -->
+    <script type="module" src="chat.js"></script>
+
+</body>
+</html>
 
