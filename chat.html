@@ -1,42 +1,20 @@
-// chat.js
-import { db } from './firebase.js'; 
-import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-const msgInput = document.getElementById('msg');
-const sendBtn = document.getElementById('send-btn');
-const messagesContainer = document.getElementById('messages');
+<div id="messages"></div>
 
-// 1. Fonction pour envoyer un message
-sendBtn.addEventListener('click', async () => {
-    const text = msgInput.value.trim();
-    if (text !== "") {
-        try {
-            await addDoc(collection(db, "messages"), {
-                text: text,
-                createdAt: serverTimestamp()
-            });
-            msgInput.value = ''; // Vide le champ après envoi
-        } catch (error) {
-            console.error("Erreur d'envoi : ", error);
-            alert("Erreur lors de l'envoi du message");
-        }
-    }
-});
+<input id="msg" placeholder="Message">
+<button onclick="send()">Envoyer</button>
 
-// 2. Fonction pour écouter les messages en temps réel
-const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+<a href="call.html">📞 Appeler</a>
 
-onSnapshot(q, (snapshot) => {
-    messagesContainer.innerHTML = ''; // Nettoie l'affichage
-    snapshot.forEach((doc) => {
-        const data = doc.data();
-        const p = document.createElement('p');
-        p.textContent = data.text || ""; // Affiche le texte
-        messagesContainer.appendChild(p);
-    });
-    // Scroll automatique vers le bas
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}, (error) => {
-    console.error("Erreur de lecture : ", error);
-});
+<script src="firebase.js"></script>
+<script src="chat.js"></script>
 
+</body>
+</html>
