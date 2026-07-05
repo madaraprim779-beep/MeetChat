@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <title>MeetChat</title>
     <style>
-        body { font-family: sans-serif; background: #ECE5DD; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: white; padding: 20px; border-radius: 10px; width: 300px; }
-        input { width: 100%; padding: 10px; margin: 5px 0; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; margin-top: 10px; cursor: pointer; }
+        body { font-family: sans-serif; background-color: #ECE5DD; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .box { background: white; padding: 20px; border-radius: 10px; width: 320px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #chat-zone { display: none; width: 100%; max-width: 400px; height: 90vh; display: flex; flex-direction: column; background: #E5DDD5; }
+        #messages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; }
+        .msg { padding: 8px 12px; margin: 5px; border-radius: 10px; max-width: 80%; background: white; align-self: flex-start; }
     </style>
 </head>
 <body>
@@ -16,19 +19,22 @@
     <h2>MeetChat</h2>
     <input type="email" id="email" placeholder="E-mail">
     <input type="password" id="password" placeholder="Mot de passe">
-    <button onclick="signIn()">Se connecter</button>
+    <button onclick="authAction('login')">Se connecter</button>
+    <button onclick="authAction('signup')" style="background:#34B7F1; margin-top:5px;">S'inscrire</button>
 </div>
 
-<div id="chat-zone" class="box" style="display:none;">
-    <h2>Discussion</h2>
-    <div id="messages" style="height: 150px; overflow-y: scroll; border: 1px solid #ccc; margin-bottom: 10px;"></div>
-    <input type="text" id="msgInput" placeholder="Ton message...">
-    <button onclick="addMessage()">Envoyer</button>
+<div id="chat-zone" style="display:none; width: 100%; max-width: 400px; height: 100vh; background: #E5DDD5; display: flex; flex-direction: column;">
+    <div id="messages" style="flex:1; overflow-y:auto; padding: 10px;"></div>
+    <div style="padding: 10px; display: flex;">
+        <input type="text" id="msgInput" placeholder="Message...">
+        <button onclick="sendMessage()" style="width: 80px;">OK</button>
+    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAsZHLa7Lt0WQQrzkQ1qJKIb54E0lXpfMU",
@@ -41,28 +47,48 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // Fonction de connexion
-    window.signIn = () => {
+    // Persistance : Vérifie si l'utilisateur est déjà connecté
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            document.getElementById('auth-box').style.display = 'none';
+            document.getElementById('chat-zone').style.display = 'flex';
+            loadMessages();
+        }
+    });
+
+    window.authAction = (type) => {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                document.getElementById('auth-box').style.display = 'none';
-                document.getElementById('chat-zone').style.display = 'block';
-            })
-            .catch(e => alert("Erreur : " + e.message));
+        if(type === 'login') signInWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
+        else createUserWithEmailAndPassword(auth, email, password).catch(e => alert(e.message));
     };
 
-    // Fonction pour ajouter un message visuellement
-    window.addMessage = () => {
+    window.sendMessage = async () => {
         const input = document.getElementById('msgInput');
-        const div = document.getElementById('messages');
-        if(input.value.trim() !== "") {
-            div.innerHTML += `<p><b>Moi:</b> ${input.value}</p>`;
+        if (input.value.trim() !== "") {
+            await addDoc(collection(db, "messages"), {
+                text: input.value,
+                user: auth.currentUser.email,
+                createdAt: serverTimestamp()
+            });
             input.value = "";
         }
     };
+
+    function loadMessages() {
+        const q = query(collection(db, "messages"), orderBy("createdAt"));
+        onSnapshot(q, (snapshot) => {
+            const container = document.getElementById('messages');
+            container.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                container.innerHTML += `<div class="msg"><b>${data.user.split('@')[0]}:</b> ${data.text}</div>`;
+            });
+            container.scrollTop = container.scrollHeight;
+        });
+    }
 </script>
 </body>
 </html>
