@@ -1,21 +1,18 @@
-// 1. Importez les fonctions modulaires nécessaires
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// 2. Votre configuration reste identique
 const firebaseConfig = {
-  apiKey: "VOTRE_API_KEY",
-  authDomain: "VOTRE_PROJET.firebaseapp.com",
-  projectId: "VOTRE_PROJECT_ID",
-  storageBucket: "VOTRE_BUCKET",
-  messagingSenderId: "XXXX",
-  appId: "XXXX"
+  apiKey: "AizaSyAsZHLa7Lt8MQqrzkQ1qJKib54E0lxpfMU",
+  authDomain: "meetchat-8f5a8.firebaseapp.com",
+  projectId: "meetchat-8f5a8",
+  storageBucket: "meetchat-8f5a8.firebasestorage.app",
+  messagingSenderId: "899856294869",
+  appId: "1:899856294869:web:ff5bd9ad7298df9ade9efc"
 };
 
-// 3. Initialisation
 const app = initializeApp(firebaseConfig);
 
-// 4. Exportation des services (C'est ici que ça change)
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
