@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>MeetChat</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetChat</title>
+    <style>
+        body { background-color: #ECE5DD; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background-color: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>MeetChat</h1>
-  <p>Chat en temps réel</p>
-
-  <a href="login.html" class="btn">Connexion</a>
-  <a href="register.html" class="btn btn2">Créer un compte</a>
+<div class="login-card">
+    <h2>Connexion MeetChat</h2>
+    <input type="email" id="email" placeholder="Adresse e-mail">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button onclick="login()">Se connecter</button>
 </div>
+
+<script>
+    function login() {
+        alert("Fonction de connexion à lier avec Firebase SDK");
+    }
+</script>
 
 </body>
 </html>
