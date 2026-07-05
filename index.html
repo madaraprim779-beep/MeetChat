@@ -1,61 +1,9 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>MeetChat - Inscription/Connexion</title>
-    <style>
-        body { background-color: #ECE5DD; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { background: white; padding: 30px; border-radius: 10px; width: 300px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; margin-top: 10px; background: #25D366; color: white; border: none; cursor: pointer; border-radius: 5px; }
-    </style>
-</head>
-<body>
-
-<div class="box">
-    <h2>MeetChat</h2>
-    <input type="email" id="email" placeholder="E-mail">
-    <input type="password" id="password" placeholder="Mot de passe">
-    
-    <button onclick="signUp()">S'inscrire</button>
-    <button onclick="signIn()" style="background:#34B7F1;">Se connecter</button>
-    <p id="message"></p>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyAsZHLa7Lt0WQQrzkQ1qJKIb54E0lXpfMU",
-        authDomain: "meetchat-8f5a8.firebaseapp.com",
-        projectId: "meetchat-8f5a8",
-        storageBucket: "meetchat-8f5a8.appspot.com",
-        messagingSenderId: "899856294069",
-        appId: "1:899856294069:web:ff5bd9ad7298df9ade9efc"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    // Fonction d'Inscription
-    window.signUp = () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(() => document.getElementById('message').innerText = "Compte créé avec succès !")
-            .catch((error) => document.getElementById('message').innerText = "Erreur : " + error.message);
-    };
-
-    // Fonction de Connexion
-    window.signIn = () => {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        signInWithEmailAndPassword(auth, email, password)
-            .then(() => document.getElementById('message').innerText = "Connexion réussie !")
-            .catch((error) => document.getElementById('message').innerText = "Erreur : " + error.message);
-    };
-</script>
-
-</body>
-</html>
+// Remplace le .then() de ta fonction signIn() par ceci :
+signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+        document.getElementById('message').innerText = "Connexion réussie !";
+        // Cache le formulaire
+        document.querySelector('.box').style.display = 'none';
+        // Affiche une zone de chat (tu devras créer cette div dans ton HTML)
+        document.body.innerHTML += '<div class="box"><h1>Bienvenue dans le Chat !</h1><p>Tu peux commencer à discuter.</p></div>';
+    })
