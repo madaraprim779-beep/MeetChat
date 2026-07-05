@@ -2,37 +2,47 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>MeetChat - Discussion</title>
+    <title>MeetChat</title>
     <style>
-        body { font-family: sans-serif; background: #ECE5DD; margin: 0; padding: 20px; }
-        #chat-zone { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
-        #messages { height: 200px; overflow-y: scroll; border: 1px solid #ccc; margin-bottom: 10px; padding: 5px; }
+        body { font-family: sans-serif; background: #ECE5DD; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 20px; border-radius: 10px; width: 300px; }
+        input { width: 100%; padding: 10px; margin: 5px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="auth-box" class="box">
-    <h2>Connexion</h2>
-    <input type="email" id="email" placeholder="E-mail"><br>
-    <input type="password" id="password" placeholder="Mot de passe"><br>
+    <h2>MeetChat</h2>
+    <input type="email" id="email" placeholder="E-mail">
+    <input type="password" id="password" placeholder="Mot de passe">
     <button onclick="signIn()">Se connecter</button>
 </div>
 
-<div id="chat-zone" style="display:none;">
-    <h2>MeetChat</h2>
-    <div id="messages"></div>
-    <input type="text" id="messageInput" placeholder="Ton message...">
-    <button onclick="sendMessage()">Envoyer</button>
+<div id="chat-zone" class="box" style="display:none;">
+    <h2>Discussion</h2>
+    <div id="messages" style="height: 150px; overflow-y: scroll; border: 1px solid #ccc; margin-bottom: 10px;"></div>
+    <input type="text" id="msgInput" placeholder="Ton message...">
+    <button onclick="addMessage()">Envoyer</button>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-    const firebaseConfig = { /* RECOLLE TA CONFIG ICI */ };
+    const firebaseConfig = {
+        apiKey: "AIzaSyAsZHLa7Lt0WQQrzkQ1qJKIb54E0lXpfMU",
+        authDomain: "meetchat-8f5a8.firebaseapp.com",
+        projectId: "meetchat-8f5a8",
+        storageBucket: "meetchat-8f5a8.appspot.com",
+        messagingSenderId: "899856294069",
+        appId: "1:899856294069:web:ff5bd9ad7298df9ade9efc"
+    };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // Fonction de connexion
     window.signIn = () => {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -44,13 +54,15 @@
             .catch(e => alert("Erreur : " + e.message));
     };
 
-    window.sendMessage = () => {
-        const msg = document.getElementById('messageInput').value;
+    // Fonction pour ajouter un message visuellement
+    window.addMessage = () => {
+        const input = document.getElementById('msgInput');
         const div = document.getElementById('messages');
-        div.innerHTML += `<p><b>Moi:</b> ${msg}</p>`;
-        document.getElementById('messageInput').value = '';
+        if(input.value.trim() !== "") {
+            div.innerHTML += `<p><b>Moi:</b> ${input.value}</p>`;
+            input.value = "";
+        }
     };
 </script>
-
 </body>
 </html>
