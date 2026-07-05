@@ -1,23 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Chat MeetChat</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Chat MeetChat</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>💬 MeetChat</h2>
+    <h2>💬 MeetChat</h2>
 
-<div id="messages"></div>
+    <div id="messages"></div>
 
-<input type="text" id="msg" placeholder="Écrire un message...">
-<button onclick="sendMessage()">Envoyer</button>
+    <input type="text" id="msg" placeholder="Écrire un message...">
+    <button id="send-btn">Envoyer</button>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
-<script src="firebase.js"></script>
-<script src="chat.js"></script>
-
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="chat.js"></script>
 </body>
 </html>
