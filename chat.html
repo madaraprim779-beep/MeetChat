@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Chat MeetChat</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<!-- Remplacez vos anciennes balises script par celles-ci -->
+<script type="module">
+  // Importation via CDN (Version modulaire)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    <h2>💬 MeetChat</h2>
+  // Votre configuration Firebase
+  const firebaseConfig = {
+    apiKey: "AizaSyAsZHLa7Lt8MQqrzkQ1qJKib54E0lxpfMU",
+    authDomain: "meetchat-8f5a8.firebaseapp.com",
+    projectId: "meetchat-8f5a8",
+    storageBucket: "meetchat-8f5a8.firebasestorage.app",
+    messagingSenderId: "899856294869",
+    appId: "1:899856294869:web:ff5bd9ad7298df9ade9efc"
+  };
 
-    <div id="messages"></div>
+  const app = initializeApp(firebaseConfig);
+  export const auth = getAuth(app);
+  export const db = getFirestore(app);
+</script>
 
-    <input type="text" id="msg" placeholder="Écrire un message...">
-    <button id="send-btn">Envoyer</button>
-
-    <script type="module" src="firebase.js"></script>
-    <script type="module" src="chat.js"></script>
-</body>
-</html>
