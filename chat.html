@@ -1,26 +1,42 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeetChat</title>
-</head>
-<body>
+// chat.js
+import { db } from './firebase.js'; 
+import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    <h1>MeetChat</h1>
+const msgInput = document.getElementById('msg');
+const sendBtn = document.getElementById('send-btn');
+const messagesContainer = document.getElementById('messages');
 
-    <!-- Zone d'affichage des messages -->
-    <div id="messages" style="border: 1px solid #ccc; height: 300px; overflow-y: scroll; margin-bottom: 10px; padding: 10px;">
-        <!-- Les messages s'afficheront ici -->
-    </div>
+// 1. Fonction pour envoyer un message
+sendBtn.addEventListener('click', async () => {
+    const text = msgInput.value.trim();
+    if (text !== "") {
+        try {
+            await addDoc(collection(db, "messages"), {
+                text: text,
+                createdAt: serverTimestamp()
+            });
+            msgInput.value = ''; // Vide le champ après envoi
+        } catch (error) {
+            console.error("Erreur d'envoi : ", error);
+            alert("Erreur lors de l'envoi du message");
+        }
+    }
+});
 
-    <!-- Zone de saisie -->
-    <input type="text" id="msg" placeholder="Tapez votre message...">
-    <button id="send-btn">Envoyer</button>
+// 2. Fonction pour écouter les messages en temps réel
+const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
-    <!-- Chargement du script principal -->
-    <script type="module" src="chat.js"></script>
-
-</body>
-</html>
+onSnapshot(q, (snapshot) => {
+    messagesContainer.innerHTML = ''; // Nettoie l'affichage
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        const p = document.createElement('p');
+        p.textContent = data.text || ""; // Affiche le texte
+        messagesContainer.appendChild(p);
+    });
+    // Scroll automatique vers le bas
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}, (error) => {
+    console.error("Erreur de lecture : ", error);
+});
 
