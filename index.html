@@ -1,41 +1,10 @@
-<body>
-    <div class="box">
-        <h2>Connexion MeetChat</h2>
-        <input type="email" id="email" placeholder="Ton e-mail" style="width: 90%; padding: 10px; margin: 10px 0;">
-        <input type="password" id="password" placeholder="Mot de passe" style="width: 90%; padding: 10px; margin: 10px 0;">
-        <button id="btnConnexion" style="width: 95%; padding: 10px; background: #25D366; color: white; border: none; cursor: pointer;">Se connecter</button>
-        <p id="message"></p>
-    </div>
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-
-        // Ta config existante
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsZHLa7Lt0WQQrzkQ1qJKIb54E0lXpfMU",
-            authDomain: "meetchat-8f5a8.firebaseapp.com",
-            projectId: "meetchat-8f5a8",
-            storageBucket: "meetchat-8f5a8.appspot.com",
-            messagingSenderId: "899856294069",
-            appId: "1:899856294069:web:ff5bd9ad7298df9ade9efc"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Action du bouton
-        document.getElementById("btnConnexion").addEventListener("click", () => {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    document.getElementById("message").innerText = "Connexion réussie !";
-                })
-                .catch((error) => {
-                    document.getElementById("message").innerText = "Erreur : " + error.message;
-                });
-        });
-    </script>
-</body>
+// Fonction pour créer un compte (S'inscrire)
+window.signUp = function() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    createUserWithEmailAndPassword(auth, email, password)
+        .then(() => alert("Compte créé !"))
+        .catch((error) => alert("Erreur : " + error.message));
+};
