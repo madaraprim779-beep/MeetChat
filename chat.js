@@ -19,7 +19,7 @@ sendBtn.addEventListener('click', async () => {
                 createdAt: serverTimestamp(),
                 userId: "user1" 
             });
-            msgInput.value = ''; // Vider l'input
+            msgInput.value = ''; // Vider l'input après envoi
         } catch (error) {
             console.error("Erreur lors de l'envoi : ", error);
         }
@@ -30,7 +30,7 @@ sendBtn.addEventListener('click', async () => {
 const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
 onSnapshot(q, (snapshot) => {
-    messagesContainer.innerHTML = ''; // Nettoyer l'affichage
+    messagesContainer.innerHTML = ''; // Nettoyer l'affichage avant de rafraîchir
     snapshot.forEach((doc) => {
         const messageData = doc.data();
         const p = document.createElement('p');
