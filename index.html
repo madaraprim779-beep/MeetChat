@@ -1,9 +1,56 @@
-// Remplace le .then() de ta fonction signIn() par ceci :
-signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-        document.getElementById('message').innerText = "Connexion réussie !";
-        // Cache le formulaire
-        document.querySelector('.box').style.display = 'none';
-        // Affiche une zone de chat (tu devras créer cette div dans ton HTML)
-        document.body.innerHTML += '<div class="box"><h1>Bienvenue dans le Chat !</h1><p>Tu peux commencer à discuter.</p></div>';
-    })
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>MeetChat - Discussion</title>
+    <style>
+        body { font-family: sans-serif; background: #ECE5DD; margin: 0; padding: 20px; }
+        #chat-zone { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+        #messages { height: 200px; overflow-y: scroll; border: 1px solid #ccc; margin-bottom: 10px; padding: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="auth-box" class="box">
+    <h2>Connexion</h2>
+    <input type="email" id="email" placeholder="E-mail"><br>
+    <input type="password" id="password" placeholder="Mot de passe"><br>
+    <button onclick="signIn()">Se connecter</button>
+</div>
+
+<div id="chat-zone" style="display:none;">
+    <h2>MeetChat</h2>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="Ton message...">
+    <button onclick="sendMessage()">Envoyer</button>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+    const firebaseConfig = { /* RECOLLE TA CONFIG ICI */ };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.signIn = () => {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                document.getElementById('auth-box').style.display = 'none';
+                document.getElementById('chat-zone').style.display = 'block';
+            })
+            .catch(e => alert("Erreur : " + e.message));
+    };
+
+    window.sendMessage = () => {
+        const msg = document.getElementById('messageInput').value;
+        const div = document.getElementById('messages');
+        div.innerHTML += `<p><b>Moi:</b> ${msg}</p>`;
+        document.getElementById('messageInput').value = '';
+    };
+</script>
+
+</body>
+</html>
