@@ -1,29 +1,35 @@
-const db = firebase.firestore();
+import { db } from './firebase.js';
+import { collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore';
 
-// envoyer message
-function sendMessage() {
-  let msg = document.getElementById("msg").value;
+// 1. Récupération des éléments du DOM (ajustez selon les ID de votre HTML)
+const chatContainer = document.getElementById('chat-messages'); // La zone où s'affichent les messages
+const sendButton = document.getElementById('send-btn');
+const messageInput = document.getElementById('message-input');
 
-  db.collection("messages").add({
-    text: msg,
-    time: Date.now()
-  });
+// 2. Écoute des messages en temps réel
+const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
-  document.getElementById("msg").value = "";
-}
+onSnapshot(q, (snapshot) => {
+    // Effacer le contenu actuel pour rafraîchir la liste
+    chatContainer.innerHTML = '';
+    
+    snapshot.forEach((doc) => {
+        const message = doc.data();
+        const div = document.createElement('div');
+        div.textContent = `${message.text}`; // Affiche le texte
+        chatContainer.appendChild(div);
+    });
+});
 
-// afficher messages en temps réel
-db.collection("messages")
-.orderBy("time")
-.onSnapshot(snapshot => {
-
-  let box = document.getElementById("messages");
-  box.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    let p = document.createElement("p");
-    p.innerText = doc.data().text;
-    box.appendChild(p);
-  });
-
+// 3. Fonction pour envoyer un message (liée à votre bouton)
+sendButton.addEventListener('click', async () => {
+    const text = messageInput.value;
+    if (text.trim() !== "") {
+        await addDoc(collection(db, "messages"), {
+            text: text,
+            createdAt: serverTimestamp(),
+            userId: "votre-id-utilisateur" // À récupérer via auth.currentUser.uid
+        });
+        messageInput.value = ''; // Vider l'input après envoi
+    }
 });
