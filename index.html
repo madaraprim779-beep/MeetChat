@@ -1,31 +1,90 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>MeetChat</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+// index.js
+import { auth, db } from "./firebase.js";
 
-<div class="box">
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot
+} from "firebase/firestore";
 
-<h1>MeetChat</h1>
+import { onUserChanged, login, register, logout } from "./auth.js";
 
-<h3>Inscription</h3>
-<input id="r-email" placeholder="Email">
-<input id="r-pass" type="password" placeholder="Mot de passe">
-<button onclick="register()">Créer compte</button>
+// =======================
+// 🔥 AUTH STATE
+// =======================
+onUserChanged((user) => {
+  if (user) {
+    console.log("Connecté :", user.email);
+    loadMessages();
+  } else {
+    console.log("Déconnecté");
+  }
+});
 
-<hr>
+// =======================
+// 🔥 ENVOI MESSAGE
+// =======================
+export async function sendMessage(text) {
+  const user = auth.currentUser;
 
-<h3>Connexion</h3>
-<input id="l-email" placeholder="Email">
-<input id="l-pass" type="password">
-<button onclick="login()">Connexion</button>
+  if (!user) {
+    console.log("Utilisateur non connecté");
+    return;
+  }
 
-</div>
+  await addDoc(collection(db, "messages"), {
+    text: text,
+    uid: user.uid,
+    email: user.email,
+    createdAt: serverTimestamp()
+  });
+}
 
-<script src="firebase.js"></script>
-<script src="auth.js"></script>
+// =======================
+// 🔥 LIRE MESSAGES (LIVE)
+// =======================
+function loadMessages() {
+  const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
-</body>
-</html>
+  onSnapshot(q, (snapshot) => {
+    let messages = [];
+
+    snapshot.forEach((doc) => {
+      messages.push(doc.data());
+    });
+
+    console.log("📩 Messages :", messages);
+
+    // 👉 Ici tu peux afficher dans ton HTML
+    renderMessages(messages);
+  });
+}
+
+// =======================
+// 🔥 AFFICHAGE SIMPLE
+// =======================
+function renderMessages(messages) {
+  const chatBox = document.getElementById("chat");
+
+  if (!chatBox) return;
+
+  chatBox.innerHTML = "";
+
+  messages.forEach((msg) => {
+    const div = document.createElement("div");
+
+    div.textContent = `${msg.email}: ${msg.text}`;
+    chatBox.appendChild(div);
+  });
+}
+
+// =======================
+// 🔥 EXEMPLES UTILISATION
+// =======================
+
+// register("test@gmail.com", "123456");
+// login("test@gmail.com", "123456");
+// logout();
