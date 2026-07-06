@@ -1,23 +1,17 @@
-// firebase.js
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// 🔥 Remplace par ta config Firebase
 const firebaseConfig = {
   apiKey: "TON_API_KEY",
-  authDomain: "TON_PROJET.firebaseapp.com",
+  authDomain: "TON_PROJECT.firebaseapp.com",
   projectId: "TON_PROJECT_ID",
   storageBucket: "TON_BUCKET.appspot.com",
-  messagingSenderId: "TON_SENDER_ID",
-  appId: "TON_APP_ID"
+  messagingSenderId: "XXX",
+  appId: "XXX"
 };
 
-// Init Firebase
 const app = initializeApp(firebaseConfig);
 
-// Services
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-export { auth, db };
+export const auth = getAuth(app);
+export const db = getFirestore(app);
