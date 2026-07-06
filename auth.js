@@ -1,24 +1,29 @@
-function register(){
-let email = document.getElementById("r-email").value;
-let pass = document.getElementById("r-pass").value;
+// auth.js
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "firebase/auth";
 
-auth.createUserWithEmailAndPassword(email, pass)
-.then(u=>{
-db.collection("users").doc(u.user.uid).set({
-email: email,
-online: true
-});
+import { auth } from "./firebase.js";
 
-window.location.href="home.html";
-});
+// 🔥 Inscription
+export function register(email, password) {
+  return createUserWithEmailAndPassword(auth, email, password);
 }
 
-function login(){
-let email = document.getElementById("l-email").value;
-let pass = document.getElementById("l-pass").value;
+// 🔥 Connexion
+export function login(email, password) {
+  return signInWithEmailAndPassword(auth, email, password);
+}
 
-auth.signInWithEmailAndPassword(email, pass)
-.then(()=>{
-window.location.href="home.html";
-});
+// 🔥 Déconnexion
+export function logout() {
+  return signOut(auth);
+}
+
+// 🔥 Observer utilisateur connecté
+export function onUserChanged(callback) {
+  return onAuthStateChanged(auth, callback);
 }
